@@ -1,0 +1,66 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+    user-select: none;
+    font-family: 'Montserrat', sans-serif;
+}
+h1{
+    font-size: 3rem;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.contenedorTateti{
+    display: grid;
+    /*
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    */
+    height: 45rem;
+    width: 45rem;
+    margin-top: 7rem;
+    align-content: center;
+    text-align: center;
+}
+
+.contenedorJuega{
+    position: relative;
+    left: -20rem;
+    top: -55rem;
+    font-size: 2rem;
+    border: 2px solid black;
+    padding: 1rem;
+}
+.contenedorJuega p{
+    border-bottom: 1px solid black;
+}
+#jugadorJuega{
+    margin-left: 4rem;
+}
+.contenedorTateti div{
+    font-size: 1rem;
+    border: 0.5px solid black;
+}
+#reiniciar{
+    position: relative;    
+    top: -6rem;
+    left: 13rem;
+    padding: 2rem;
+    border: 2px black solid;
+    font-size: 1.4rem;
+}
+#reiniciar:hover{
+    cursor: pointer;
+}
+#felicitaciones{
+    border: 2px black solid;
+    padding: 2rem;
+    position: absolute;
+    background-color: white;
+    display: none;
+    font-size: 1.4rem;
+}
