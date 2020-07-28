@@ -16,15 +16,19 @@ const pQuienJuega = document.getElementById("jugadorJuega");
 const reiniciar = document.getElementById("reiniciar");
 const felicitaciones = document.getElementById("felicitaciones");
 const contenedorTateti = document.getElementById("contenedorTateti");
+const contenedorBotones = document.getElementById("contenedorBotones");
+const contenedorBotonesArray = document.getElementById("contenedorBotones").getElementsByTagName("div");
 
 // EVENTO REINICIAR
 reiniciar.addEventListener('click',()=>{
     for(let div of arrayCasilleros){
-        div.innerText = "";
+        div.style.backgroundColor = "white";
+    }
+    for(let div of contenedorBotonesArray){
         div.setAttribute("style", "pointer-events: all");
     }
     queJugadorVa = 1;
-    pQuienJuega.innerText = jugadorUno + " x";
+    pQuienJuega.innerText = jugadorUno + " Azul";
     // Reiniciar tablero
     tableroCuatroenLinea = [];
     for(let i=0;i<colRow;i++){
@@ -47,7 +51,7 @@ function ganador(nombreJugador){
 }
 
 
-pQuienJuega.innerText = jugadorUno + " x";
+pQuienJuega.innerText = jugadorUno + " Azul";
 
 // CREADOR DIVS
 
@@ -63,33 +67,10 @@ function creadorDivs(){
             divTateti.setAttribute("row", i);
             tableroCuatroenLinea[i].push(0);
             contenedorTateti.appendChild(divTateti);
-            divTateti.addEventListener('click',creadorEventosCuatro);
         }
     }
 }
 
-// CREADOR CLICK EVENTS
-
-function creadorEventosCuatro(e){
-    espacios++
-    let div = e.target;
-    let col = parseInt(div.getAttribute("col"));
-    let row = parseInt(div.getAttribute("row"));
-    if(queJugadorVa==1){
-        div.innerText = "x";
-        div.style.backgroundColor = "blue";
-        queJugadorVa++
-        pQuienJuega.innerText = jugadorDos + " o";
-        tableroCuatroenLinea[row][col] = 1;
-        div.setAttribute("style", "pointer-events: none");
-    }else{
-        div.innerText = "o";
-        queJugadorVa--
-        pQuienJuega.innerText = jugadorUno + " x";
-        tableroCuatroenLinea[row][col] = 2;
-        div.setAttribute("style", "pointer-events: none");
-    } 
-}
 
 // INICIO DEL JUEGO 
 
@@ -101,6 +82,7 @@ function iniciarJuego(){
         iniciarJuego();
     }else{
         contenedorTateti.setAttribute("style", "grid-template-columns: repeat("+ colRow +", 1fr); grid-template-rows: repeat("+ colRow +", 1fr);");
+        contenedorBotones.setAttribute("style", "grid-template-columns: repeat("+ colRow +", 1fr); grid-template-rows: 1fr;");
     }
 }
 
@@ -206,7 +188,71 @@ function checkGanarCuatro(){
 }, 200);
 }
 
+// Creador de Divs Botones
+function creadorDivsBotones(){
+    for(let i=0;i<colRow;i++){
+       let div = document.createElement("div");
+       div.className = "botonFichas";
+       div.setAttribute("col", i);
+       div.addEventListener("click",clickDinamico);
+       contenedorBotones.appendChild(div);
+    }
+}
+
+// Evento clicks dinamicos
+
+function clickDinamico(x){
+    espacios++
+    let div = x.target;
+    let j = parseInt(div.getAttribute("col"));
+    let a;
+        // Inicio prueba
+        let divsArray = contenedorTateti.children;
+        let arrayDeDivs = [];
+        for(let divArray of divsArray){
+            if(parseInt(divArray.getAttribute("col"))==j){
+                arrayDeDivs.push(divArray);
+            }
+        }
+        // Fin prueba
+    for(let i = 0; i<colRow;i++){
+        if((tableroCuatroenLinea[i][j]==1||tableroCuatroenLinea[i][j]==2)&&i==0){
+            div.setAttribute("style", "pointer-events: none");
+            div.style.backgroundColor = "red";
+            return;
+            // Agregar cambio de color de flecha
+        }else if(tableroCuatroenLinea[i][j]==1||tableroCuatroenLinea[i][j]==2){
+            if(queJugadorVa==1){
+                tableroCuatroenLinea[i-1][j] = queJugadorVa;
+                pQuienJuega.innerText = jugadorDos + " Rojo";
+                arrayDeDivs[i-1].style.backgroundColor = "blue";
+                queJugadorVa++
+                return;
+            }else{
+                tableroCuatroenLinea[i-1][j] = queJugadorVa;
+                pQuienJuega.innerText = jugadorUno + " Azul";
+                arrayDeDivs[i-1].style.backgroundColor = "red";
+                queJugadorVa--
+                return;
+            }
+        }
+        a = i;
+    }
+    if(queJugadorVa==1){
+        tableroCuatroenLinea[a][j] = queJugadorVa;
+        pQuienJuega.innerText = jugadorDos + " Rojo";
+        arrayDeDivs[a].style.backgroundColor = "blue";
+        queJugadorVa++
+    }else{
+        tableroCuatroenLinea[a][j] = queJugadorVa;
+        pQuienJuega.innerText = jugadorUno + " Azul";
+        arrayDeDivs[a].style.backgroundColor = "red";
+        queJugadorVa--
+    }
+}
+
 iniciarJuego();
+creadorDivsBotones();
 creadorDivs();
 checkGanarCuatro();
 
